@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from '../api/axios';
 import { getImageUrl } from '../api/imageUrl';
 
+import coffeeImg from '../assets/images/coffee.png';
+import coldcoffeeImg from '../assets/images/coldcoffee.png';
+import teaImg from '../assets/images/tea.png';
+import greenteaImg from '../assets/images/greentea.png';
+
 const CATEGORIES = ['Hot Drinks', 'Cold Drinks', 'Snacks', 'Meals'];
 
 export default function MenuPage({ cart, increase, decrease }) {
@@ -25,9 +30,10 @@ export default function MenuPage({ cart, increase, decrease }) {
   if (loading) {
     return (
       <section className="menu-section page active">
-        <p style={{ color: 'white', textAlign: 'center', paddingTop: '40px' }}>
-          Loading menu...
-        </p>
+        <div className="menu-loading">
+          <span>☕</span>
+          <p>Loading menu...</p>
+        </div>
       </section>
     );
   }
@@ -35,20 +41,29 @@ export default function MenuPage({ cart, increase, decrease }) {
   if (items.length === 0) {
     return (
       <section className="menu-section page active">
-        <p style={{ color: 'white', textAlign: 'center', paddingTop: '40px' }}>
-          No menu items yet. Admin needs to add items.
-        </p>
+        <div className="menu-loading">
+          <span>☕</span>
+          <p>No menu items yet. Admin needs to add items.</p>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="menu-section page active">
+    <section className="menu-section page active" style={{ position: 'relative', overflow: 'hidden' }}>
+
+      {/* FLOATING IMAGES */}
+      <img src={coffeeImg}     className="menu-float menu-float-1" alt="coffee" />
+      <img src={coldcoffeeImg} className="menu-float menu-float-2" alt="cold coffee" />
+      <img src={teaImg}        className="menu-float menu-float-3" alt="tea" />
+      <img src={greenteaImg}   className="menu-float menu-float-4" alt="green tea" />
+
+      {/* MENU ITEMS */}
       {CATEGORIES.map(category => {
         const categoryItems = items.filter(item => item.category === category);
         if (categoryItems.length === 0) return null;
         return (
-          <div key={category}>
+          <div key={category} style={{ position: 'relative', zIndex: 1 }}>
             <h2 className="section-title">{category}</h2>
             <div className="menu-list">
               {categoryItems.map(item => (
