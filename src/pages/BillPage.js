@@ -74,7 +74,7 @@ export default function BillPage({ cart, menuItems, clearCart, showPage, userPho
   return (
     <section className="bill-page page active">
       <div className="bill-card">
-        <h2>☕ Garima Cafe</h2>
+        <h2>☕ Cafe Coffee Break</h2>
 
         <table style={{ width: '100%', marginBottom: '10px', borderCollapse: 'collapse' }}>
           <tbody>

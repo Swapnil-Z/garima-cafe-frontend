@@ -8,7 +8,7 @@ export default function Header({ showPage }) {
         onClick={() => showPage('homePage')}
         style={{ cursor: 'pointer' }}
       >
-        ☕ Garima Cafe
+        ☕ Cafe Coffee Break
       </div>
       <nav>
         <ul>
@@ -16,12 +16,7 @@ export default function Header({ showPage }) {
           <li onClick={() => showPage('cartPage')}>Cart</li>
           <li onClick={() => showPage('billPage')}>Bill</li>
           <li onClick={() => showPage('historyPage')}>History</li>
-          <li
-            onClick={() => showPage('adminLogin')}
-            style={{ opacity: 0.4, fontSize: '12px' }}
-          >
-            Admin
-          </li>
+         
         </ul>
       </nav>
     </header>

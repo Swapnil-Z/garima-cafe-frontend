@@ -100,17 +100,17 @@ export default function SplashScreen({ onComplete }) {
             margin: 0,
             letterSpacing: '3px',
           }}>
-            GARIMA
+            Cafe Coffe
           </p>
           <p style={{
             fontFamily: 'Poppins, sans-serif',
             fontSize: '13px',
             fontWeight: '400',
-            color: '#6B4C2A',
+            color: '#0a0909',
             margin: 0,
             letterSpacing: '6px',
           }}>
-            CAFE
+            Break
           </p>
         </div>
       </div>

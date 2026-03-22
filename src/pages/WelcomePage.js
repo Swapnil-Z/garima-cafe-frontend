@@ -37,7 +37,7 @@ export default function WelcomePage({ onEnter, showAdminLogin }) {
 
       {/* WELCOME CARD */}
       <div className="welcome-card">
-        <h1>☕ Garima Cafe</h1>
+        <h1>☕ Cafe Coffee Break</h1>
         <p className="welcome-subtitle">Good coffee, good mood</p>
 
         <div className="welcome-divider" />
