@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-left">
-          <h3>☕ Garima Cafe</h3>
+          <h3>☕ Cafe Coffee Break</h3>
           <p>Good coffee, good mood ☕</p>
         </div>
         <div className="footer-center">
@@ -22,7 +22,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        © 2026 Garima Cafe | All Rights Reserved
+        © 2026 Cafe Coffee Break | All Rights Reserved
       </div>
     </footer>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'garima123';
+const STATIC_TOKEN = 'garima-admin-secret-token';
 
 export default function AdminLogin({ onLogin, onBack }) {
   const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ export default function AdminLogin({ onLogin, onBack }) {
       return;
     }
     if (username === ADMIN_USER && password === ADMIN_PASS) {
+      localStorage.setItem('adminToken', STATIC_TOKEN);
       onLogin();
     } else {
       setError('Invalid username or password');
