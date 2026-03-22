@@ -565,12 +565,12 @@ nav li:hover {
    WELCOME PAGE
 ================================ */
 .welcome-page {
-  height: 100vh;
-  max-height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* BACKGROUND CIRCLES */
@@ -1224,13 +1224,14 @@ nav li:hover {
   }
 
   .welcome-hero {
-    flex-direction: column;
-    padding: 80px 20px 20px 20px;
-    gap: 24px;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-  }
+  flex-direction: column;
+  padding: 80px 20px 20px 20px;
+  gap: 24px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
 
   .welcome-hero-left {
     max-width: 100%;
@@ -1273,6 +1274,14 @@ nav li:hover {
     gap: 6px;
     align-items: center;
   }
+  .welcome-marquee-wrapper {
+  flex-shrink: 0;
+}
+
+.welcome-footer {
+  flex-shrink: 0;
+  margin-top: 0;
+}
 
   .circle-1 {
     width: 300px;
