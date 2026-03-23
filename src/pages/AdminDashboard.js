@@ -15,8 +15,6 @@ export default function AdminDashboard({ onLogout }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [activeCategory, setActiveCategory] = useState('Hot Drinks');
-
-  // NEW: tabs + history state
   const [mainTab, setMainTab] = useState('dashboard');
   const [searchPhone, setSearchPhone] = useState('');
   const [historyOrders, setHistoryOrders] = useState([]);
@@ -51,13 +49,11 @@ export default function AdminDashboard({ onLogout }) {
     setLoading(true);
     setError('');
     setSuccess('');
-
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', price);
     formData.append('category', category);
     formData.append('image', image);
-
     try {
       await axios.post('/menu', formData, {
         headers: {
@@ -66,10 +62,7 @@ export default function AdminDashboard({ onLogout }) {
         },
       });
       setSuccess('Item added successfully!');
-      setName('');
-      setPrice('');
-      setImage(null);
-      setPreview(null);
+      setName(''); setPrice(''); setImage(null); setPreview(null);
       fetchItems();
     } catch (err) {
       setError('Failed to add item. Please try again.');
@@ -91,7 +84,6 @@ export default function AdminDashboard({ onLogout }) {
     }
   };
 
-  // NEW: search user history
   const searchUserHistory = async () => {
     if (!searchPhone || searchPhone.length < 10) {
       setHistoryError('Please enter a valid 10-digit phone number');
@@ -100,7 +92,6 @@ export default function AdminDashboard({ onLogout }) {
     setHistoryLoading(true);
     setHistoryError('');
     setHistorySearched(false);
-
     try {
       const res = await axios.get(`/users/history/${searchPhone}`);
       setHistoryOrders(res.data);
@@ -114,146 +105,82 @@ export default function AdminDashboard({ onLogout }) {
 
   const filteredItems = items.filter(item => item.category === activeCategory);
 
-  // shared tab button style
-  const tabStyle = (isActive) => ({
-    padding: '12px 24px',
-    background: 'transparent',
-    color: isActive ? '#ff7b00' : 'rgba(255,255,255,0.6)',
-    border: 'none',
-    borderBottom: isActive ? '3px solid #ff7b00' : '3px solid transparent',
-    cursor: 'pointer',
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: '14px',
-    fontWeight: '500',
-    transition: 'all 0.3s',
-    marginBottom: '-2px',
-  });
-
   return (
-    <div style={{ minHeight: '100vh', paddingBottom: '80px' }}>
+    <div className="admin-dashboard-wrapper" style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
 
-      {/* FIXED ADMIN HEADER */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 30px',
-        background: 'rgba(0,0,0,0.6)',
-        backdropFilter: 'blur(10px)',
-        zIndex: 100,
-        boxSizing: 'border-box',
-      }}>
-        <h2 style={{ color: '#ffb347', fontSize: '20px', fontWeight: '600' }}>
-          Admin Panel
-        </h2>
-        <button
-          onClick={onLogout}
-          style={{
-            background: 'rgba(255,80,80,0.2)',
-            color: '#ff6b6b',
-            border: '1px solid #ff6b6b',
-            padding: '7px 18px',
-            borderRadius: '20px',
-            cursor: 'pointer',
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: '13px',
-          }}
-        >
+      {/* FIXED HEADER */}
+      <div className="admin-dash-header">
+        <div className="admin-dash-header-left">
+          <span className="admin-dash-icon">☕</span>
+          <div>
+            <h2 className="admin-dash-title">Admin Panel</h2>
+            <p className="admin-dash-subtitle">Cafe Coffee Break</p>
+          </div>
+        </div>
+        <button className="admin-logout-btn" onClick={onLogout}>
           Logout
         </button>
       </div>
 
-      {/* MAIN TABS */}
-      <div style={{
-        display: 'flex',
-        gap: 0,
-        marginTop: '65px',
-        borderBottom: '2px solid rgba(255,255,255,0.1)',
-        padding: '0 20px',
-        position: 'sticky',
-        top: '60px',
-        background: 'rgba(0,0,0,0.5)',
-        backdropFilter: 'blur(10px)',
-        zIndex: 99,
-      }}>
+      {/* TABS */}
+      <div className="admin-dash-tabs">
         <button
-          style={tabStyle(mainTab === 'dashboard')}
+          className={`admin-dash-tab ${mainTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => setMainTab('dashboard')}
         >
           Dashboard
         </button>
         <button
-          style={tabStyle(mainTab === 'history')}
+          className={`admin-dash-tab ${mainTab === 'history' ? 'active' : ''}`}
           onClick={() => setMainTab('history')}
         >
           User History
         </button>
       </div>
 
-      {/* ================================
-          TAB: DASHBOARD (existing)
-      ================================ */}
+      {/* TAB: DASHBOARD */}
       {mainTab === 'dashboard' && (
-        <div style={{ padding: '30px 20px', maxWidth: '900px', margin: '0 auto' }}>
+        <div className="admin-dash-content" style={{ flex: 1 }}>
 
-          {/* ADD ITEM FORM */}
-          <div style={{
-            background: 'rgba(255,255,255,0.10)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '12px',
-            padding: '24px',
-            marginBottom: '30px',
-            border: '1px solid rgba(255,255,255,0.15)'
-          }}>
-            <h3 style={{ color: 'white', marginBottom: '16px', fontSize: '16px' }}>
-              Add New Item
-            </h3>
+          <div className="admin-form-card">
+            <h3 className="admin-form-title">Add New Item</h3>
 
-            {error && (
-              <p style={{ color: '#ff6b6b', fontSize: '13px', marginBottom: '10px' }}>{error}</p>
-            )}
-            {success && (
-              <p style={{ color: '#2ea44f', fontSize: '13px', marginBottom: '10px' }}>{success}</p>
-            )}
+            {error && <div className="admin-alert admin-alert-error">{error}</div>}
+            {success && <div className="admin-alert admin-alert-success">{success}</div>}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-              <div>
-                <label style={{ color: 'white', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
-                  Item Name *
-                </label>
+            <div className="admin-form-grid">
+              <div className="admin-form-field">
+                <label className="admin-field-label">Item Name *</label>
                 <input
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="e.g. Masala Tea"
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', fontSize: '14px', boxSizing: 'border-box' }}
+                  className="admin-field-input"
                 />
               </div>
-              <div>
-                <label style={{ color: 'white', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
-                  Price (₹) *
-                </label>
+              <div className="admin-form-field">
+                <label className="admin-field-label">Price (₹) *</label>
                 <input
                   type="number"
                   value={price}
                   onChange={e => setPrice(e.target.value)}
                   placeholder="e.g. 30"
-                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', fontSize: '14px', boxSizing: 'border-box' }}
+                  className="admin-field-input"
                 />
               </div>
             </div>
 
-            <div style={{ marginBottom: '12px' }}>
-              <label style={{ color: 'white', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
-                Category *
-              </label>
+            <div className="admin-form-field">
+              <label className="admin-field-label">Category *</label>
               <select
                 value={category}
                 onChange={e => setCategory(e.target.value)}
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: 'none', fontSize: '14px' }}
+                className="admin-field-input"
               >
                 {CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -261,21 +188,19 @@ export default function AdminDashboard({ onLogout }) {
               </select>
             </div>
 
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ color: 'white', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
-                Item Image *
-              </label>
+            <div className="admin-form-field">
+              <label className="admin-field-label">Item Image *</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                style={{ color: 'white', fontSize: '13px' }}
+                className="admin-file-input"
               />
               {preview && (
                 <img
                   src={preview}
                   alt="preview"
-                  style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '10px', marginTop: '10px' }}
+                  className="admin-preview-img"
                 />
               )}
             </div>
@@ -283,52 +208,29 @@ export default function AdminDashboard({ onLogout }) {
             <button
               onClick={handleAdd}
               disabled={loading}
-              style={{
-                background: '#ff7b00',
-                color: 'white',
-                border: 'none',
-                padding: '12px 24px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '14px',
-                opacity: loading ? 0.7 : 1,
-                width: '100%',
-                fontFamily: 'Poppins, sans-serif',
-              }}
+              className="admin-add-btn"
             >
               {loading ? 'Adding...' : '+ Add Item'}
             </button>
           </div>
 
-          {/* CATEGORY TABS */}
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+          <div className="admin-category-tabs">
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '20px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  fontSize: '13px',
-                  background: activeCategory === cat ? '#ff7b00' : 'rgba(255,255,255,0.15)',
-                  color: 'white',
-                  transition: 'all 0.2s',
-                  fontFamily: 'Poppins, sans-serif',
-                }}
+                className={`admin-category-tab ${activeCategory === cat ? 'active' : ''}`}
               >
                 {cat} ({items.filter(i => i.category === cat).length})
               </button>
             ))}
           </div>
 
-          {/* ITEMS LIST */}
           <div className="menu-list">
             {filteredItems.length === 0 ? (
-              <p style={{ color: 'white', opacity: 0.6 }}>No items in this category yet.</p>
+              <div className="admin-empty">
+                <p>No items in this category yet.</p>
+              </div>
             ) : (
               filteredItems.map(item => (
                 <div className="menu-row" key={item._id}>
@@ -345,18 +247,7 @@ export default function AdminDashboard({ onLogout }) {
                   </div>
                   <button
                     onClick={() => handleDelete(item._id)}
-                    style={{
-                      background: '#e53935',
-                      color: 'white',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      fontWeight: '600',
-                      fontSize: '13px',
-                      flexShrink: 0,
-                      fontFamily: 'Poppins, sans-serif',
-                    }}
+                    className="admin-delete-btn"
                   >
                     Delete
                   </button>
@@ -367,91 +258,75 @@ export default function AdminDashboard({ onLogout }) {
         </div>
       )}
 
-      {/* ================================
-          TAB: USER HISTORY (NEW)
-      ================================ */}
+      {/* TAB: USER HISTORY */}
       {mainTab === 'history' && (
-        <div className="container" style={{ marginTop: '30px' }}>
-          <h2 className="section-title">Search User History</h2>
+        <div className="admin-dash-content" style={{ flex: 1 }}>
+          <div className="admin-form-card">
+            <h3 className="admin-form-title">Search User History</h3>
+            <p className="admin-form-desc">
+              Enter a registered phone number to view their order history
+            </p>
 
-          {/* SEARCH ROW */}
-          <div style={{ display: 'flex', gap: '12px', marginTop: '20px', flexWrap: 'wrap' }}>
-            <input
-              type="number"
-              className="welcome-input"
-              placeholder="Enter user phone number"
-              value={searchPhone}
-              onChange={e => setSearchPhone(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && searchUserHistory()}
-              style={{ marginBottom: 0, flex: 1, minWidth: '200px' }}
-            />
-            <button
-              className="welcome-btn"
-              onClick={searchUserHistory}
-              style={{ width: 'auto', padding: '12px 28px', marginTop: 0 }}
-            >
-              Search
-            </button>
+            <div className="admin-search-row">
+              <input
+                type="number"
+                className="admin-field-input"
+                placeholder="Enter 10-digit phone number"
+                value={searchPhone}
+                onChange={e => setSearchPhone(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && searchUserHistory()}
+                style={{ flex: 1, marginBottom: 0 }}
+              />
+              <button
+                className="admin-add-btn"
+                onClick={searchUserHistory}
+                style={{ width: 'auto', padding: '11px 28px' }}
+              >
+                Search
+              </button>
+            </div>
+
+            {historyError && (
+              <div className="admin-alert admin-alert-error" style={{ marginTop: '12px' }}>
+                {historyError}
+              </div>
+            )}
           </div>
 
-          {historyError && (
-            <p className="welcome-error" style={{ marginTop: '10px' }}>{historyError}</p>
-          )}
-
           {historyLoading && (
-            <p style={{ color: 'white', marginTop: '16px' }}>Loading...</p>
+            <div className="admin-empty">
+              <p style={{ color: 'white' }}>Loading orders...</p>
+            </div>
           )}
 
-          {/* RESULTS */}
           {historySearched && !historyLoading && (
-            <div style={{ marginTop: '24px' }}>
+            <div style={{ marginTop: '20px' }}>
               {historyOrders.length === 0 ? (
-                <p style={{ color: 'white', opacity: 0.7 }}>
-                  No orders found for +91 {searchPhone}
-                </p>
+                <div className="admin-empty">
+                  <p>No orders found for +91 {searchPhone}</p>
+                </div>
               ) : (
                 <>
-                  <p style={{ color: '#ffb347', marginBottom: '16px', fontSize: '14px' }}>
+                  <p className="admin-result-count">
                     {historyOrders.length} order(s) found for +91 {searchPhone}
                   </p>
-
                   {historyOrders.map((order, i) => (
-                    <div
-                      className="menu-row"
-                      key={order._id}
-                      style={{
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        marginBottom: '14px',
-                      }}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                        <h3 style={{ color: 'white' }}>
-                          Order {historyOrders.length - i}
-                        </h3>
-                        <p style={{ color: '#ffb347', fontWeight: '600' }}>
-                          ₹{order.total}
-                        </p>
+                    <div className="admin-order-card" key={order._id}>
+                      <div className="admin-order-header">
+                        <h3>Order {historyOrders.length - i}</h3>
+                        <span className="admin-order-total">₹{order.total}</span>
                       </div>
-
-                      <p style={{ color: 'white', opacity: 0.8 }}>Name: {order.name}</p>
-                      <p style={{ color: 'white', opacity: 0.8 }}>Table: {order.table}</p>
-                      <p style={{ color: 'white', opacity: 0.8 }}>Payment: {order.payment}</p>
-
-                      <div style={{ marginTop: '8px', width: '100%' }}>
+                      <div className="admin-order-details">
+                        <span>👤 {order.name}</span>
+                        <span>🪑 Table {order.table}</span>
+                        <span>💳 {order.payment}</span>
+                      </div>
+                      <div className="admin-order-items">
                         {order.items.map((it, j) => (
-                          <p
-                            key={j}
-                            style={{ color: 'white', opacity: 0.7, fontSize: '13px' }}
-                          >
-                            {it.name} x {it.qty} = ₹{it.price}
-                          </p>
+                          <p key={j}>{it.name} × {it.qty} = ₹{it.price}</p>
                         ))}
                       </div>
-
-                      <p style={{ color: 'white', opacity: 0.5, fontSize: '12px', marginTop: '6px' }}>
-                        {order.date}
-                      </p>
+                      <p className="admin-order-date">{order.date}</p>
                     </div>
                   ))}
                 </>
@@ -460,6 +335,32 @@ export default function AdminDashboard({ onLogout }) {
           )}
         </div>
       )}
+
+      {/* FOOTER */}
+      <footer className="footer" style={{ marginTop: 'auto' }}>
+        <div className="footer-content">
+          <div className="footer-left">
+            <h3>☕ Cafe Coffee Break</h3>
+            <p>Good coffee, good mood ☕</p>
+          </div>
+          <div className="footer-center">
+            <p>📍 Location: Nagar City</p>
+            <p>📞 +91 9876543210</p>
+          </div>
+          <div className="footer-right">
+            <p>Follow Us</p>
+            <div className="social-icons">
+              <i className="ri-instagram-line"></i>
+              <i className="ri-facebook-circle-line"></i>
+              <i className="ri-whatsapp-line"></i>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          © 2026 Cafe Coffee Break | All Rights Reserved
+        </div>
+      </footer>
+
     </div>
   );
 }

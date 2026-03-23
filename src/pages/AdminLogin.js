@@ -8,62 +8,94 @@ export default function AdminLogin({ onLogin, onBack }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
     if (!username || !password) {
       setError('Please fill all fields');
       return;
     }
-    if (username === ADMIN_USER && password === ADMIN_PASS) {
-      localStorage.setItem('adminToken', STATIC_TOKEN);
-      onLogin();
-    } else {
-      setError('Invalid username or password');
-    }
+    setLoading(true);
+    setTimeout(() => {
+      if (username === ADMIN_USER && password === ADMIN_PASS) {
+        localStorage.setItem('adminToken', STATIC_TOKEN);
+        onLogin();
+      } else {
+        setError('Invalid username or password');
+        setLoading(false);
+      }
+    }, 600);
   };
 
   return (
-    <section className="bill-page page active">
-      <div className="bill-card">
-        <h2 style={{ color: 'orange', textAlign: 'center', marginBottom: '20px' }}>
-          ☕ Admin Login
-        </h2>
+    <div className="admin-login-page">
+
+      {/* BACKGROUND CIRCLES */}
+      <div className="welcome-bg-circle circle-1" />
+      <div className="welcome-bg-circle circle-2" />
+
+      {/* BACK BUTTON */}
+      <button className="admin-back-btn" onClick={onBack}>
+        ← Back
+      </button>
+
+      {/* LOGIN CARD */}
+      <div className="admin-login-card">
+        <div className="admin-login-icon">🔐</div>
+        <h2 className="admin-login-title">Admin Login</h2>
+        <p className="admin-login-subtitle">Cafe Coffee Break Dashboard</p>
+
+        <div className="welcome-divider" style={{ marginBottom: '28px' }} />
 
         {error && (
-          <p style={{ color: 'red', fontSize: '13px', marginBottom: '10px', textAlign: 'center' }}>
-            {error}
-          </p>
+          <div className="admin-login-error">{error}</div>
         )}
 
-        <label>Username *</label>
-        <input
-          type="text"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          placeholder="Enter username"
-        />
+        <div className="admin-login-field">
+          <label className="welcome-label">Username</label>
+          <input
+            type="text"
+            className="welcome-input"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder="Enter username"
+          />
+        </div>
 
-        <label>Password *</label>
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder="Enter password"
-          onKeyDown={e => e.key === 'Enter' && handleLogin()}
-        />
-
-        <button type="button" onClick={handleLogin}>
-          LOGIN
-        </button>
+        <div className="admin-login-field">
+          <label className="welcome-label">Password</label>
+          <input
+            type="password"
+            className="welcome-input"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Enter password"
+            onKeyDown={e => e.key === 'Enter' && handleLogin()}
+          />
+        </div>
 
         <button
-          type="button"
-          onClick={onBack}
-          style={{ marginTop: '10px', background: '#888' }}
+          className="welcome-btn"
+          onClick={handleLogin}
+          disabled={loading}
+          style={{ marginTop: '8px' }}
         >
-          ← Back
+          {loading ? 'Logging in...' : 'Login as Admin'}
         </button>
       </div>
-    </section>
+
+      {/* FOOTER */}
+      <footer className="footer" style={{
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        zIndex: 1,
+      }}>
+        <div className="footer-bottom" style={{ borderTop: 'none' }}>
+          © 2026 Cafe Coffee Break | All Rights Reserved
+        </div>
+      </footer>
+
+    </div>
   );
 }
